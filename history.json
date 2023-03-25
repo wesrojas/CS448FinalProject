@@ -1,0 +1,113 @@
+[
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "record-based"
+    },
+    "baseColumnName": "des",
+    "expression": "grel:(value.split(' ')[0] + \" \" + value.split(' ')[1])",
+    "onError": "set-to-blank",
+    "newColumnName": "Batter",
+    "columnInsertIndex": 10,
+    "description": "Create column Batter at index 10 based on column des using expression grel:(value.split(' ')[0] + \" \" + value.split(' ')[1])"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "des",
+    "description": "Remove column des"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "record-based"
+    },
+    "baseColumnName": "player_name",
+    "expression": "grel:value.split(', ')[1] + ' ' + value.split(', ')[0]",
+    "onError": "set-to-blank",
+    "newColumnName": "Pitcher",
+    "columnInsertIndex": 4,
+    "description": "Create column Pitcher at index 4 based on column player_name using expression grel:value.split(', ')[1] + ' ' + value.split(', ')[0]"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "player_name",
+    "description": "Remove column player_name"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "record-based"
+    },
+    "columnName": "game_date",
+    "expression": "grel:value.split('/')[0]",
+    "onError": "set-to-blank",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Text transform on cells in column game_date using expression grel:value.split('/')[0]"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "record-based"
+    },
+    "columnName": "game_date",
+    "expression": "value.toNumber()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Text transform on cells in column game_date using expression value.toNumber()"
+  },
+  {
+    "op": "core/column-rename",
+    "oldColumnName": "game_date",
+    "newColumnName": "Month",
+    "description": "Rename column game_date to Month"
+  },
+  {
+    "op": "core/mass-edit",
+    "engineConfig": {
+      "facets": [],
+      "mode": "record-based"
+    },
+    "columnName": "Month",
+    "expression": "value",
+    "edits": [
+      {
+        "from": [
+          "10"
+        ],
+        "fromBlank": false,
+        "fromError": false,
+        "to": "9"
+      }
+    ],
+    "description": "Mass edit cells in column Month"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "record-based"
+    },
+    "columnName": "zone",
+    "expression": "value.toNumber()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Text transform on cells in column zone using expression value.toNumber()"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "batter",
+    "description": "Remove column batter"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "pitcher",
+    "description": "Remove column pitcher"
+  }
+]

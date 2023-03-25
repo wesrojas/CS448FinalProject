@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>CS448 Final Project</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
+  <style>
+    .container {
+      position: relative;
+      display: block;
+      margin-bottom: 2rem;
+    }
+  </style>
+  <style>
+    p {
+      max-width: 1200px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Wesley Rojas - CS448 Final Project - MLB Hitter and Pitcher Analysis Using Statcast Data</h1>
+  <p>Over the past several years, the use of sophisticated tracking technology has revolutionized the way we analyze and
+    understand the game of baseball. One such technology, Statcast, has allowed us to go beyond traditional metrics and
+    gain deeper insights into player performance. In this project, we will explore Statcast data to analyze MLB hitters
+    and pitchers using several key data points.
+  </p>
+  <p>
+    Statcast is a high-speed, high-accuracy tracking system that collects data on a wide range of baseball plays. For
+    this analysis, we have chosen to focus on the following columns: Pitcher, Batter, pitch_type, zone (region
+    within/out of the strike zone), xwOBA, Month, and Year. These columns allow us to create visualizations of all the
+    pitches a batter saw or a pitcher threw during a given period.
+  </p>
+  <p>
+    By examining the xwOBA (expected weighted on-base average) statistic, we can approximate a player's success on
+    pitches
+    in a specific zone. For some brief background, the wOBA (weighted On-Base Average) statistic gives us an idea of a
+    player's offensive contributions by considering how they reached base, appropriately giving a home run greater
+    weight than a single. “xwOBA” (expected wOBA) is a further refinement of this concept, using Statcast data to
+    determine a
+    player's expected wOBA based on the exit speed and launch angle of every ball that a player hits. wOBA measures
+    actual offensive outcomes, while xwOBA estimates deserved outcomes based on the quality of contact.
+  </p>
+  <p>
+    Because the Statcast data sets have a pre-populated column displaying the xwOBA values for each ball that has been
+    hit every season since 2017, we have chosen to use this highly objective measure to represent batter and pitcher
+    performance. A batter will always want a higher xwOBA, while pitchers will always try to minimize the xwOBA on
+    pitches they throw. In addition to xwOBA, each zone will display the relative proportion of pitches from the current
+    subset of pitches that were thrown in each respective zone. Each of the following visualizations are depictions of
+    the strike
+    zone and surrounding out-of-the-strike-zone regions from the catcher's perspective, from behind home plate.
+  </p>
+  <p>
+    When viewing the batters' names, you might notice (R), (L), or (S) next to their names. These letters indicate which
+    side of the plate the batter stands on. (R) stands for right-handed batters, who stand on the left side of the plate
+    from the catcher's perspective. (L) indicates left-handed batters, who stand on the right side of the plate, and (S)
+    represents switch-hitters, who can bat from either side of the plate depending on the handedness of the pitcher.
+  </p>
+  In these visualizations, you'll encounter different pitch types, including:
+  <p>
+    Four Seam Fastball (FF): A fast pitch with minimal horizontal movement and slight upward movement;
+    Two Seam Fastball (FT): A fast pitch with more horizontal movement than the four-seam fastball and slightly less
+    speed;
+    Slider (SL): A breaking pitch that moves laterally and has a downward break;
+    Changeup (CH): A slower pitch that looks like a fastball but has less velocity and more downward movement;
+    Curveball (CU): A breaking pitch with significant downward movement and less horizontal movement than a slider;
+    Cutter (FC): A pitch with characteristics between a fastball and a slider, having both some speed and lateral
+    movement
+    Our first visualization also allows you to filter batters' results by the pitcher's throwing arm (L or R). In
+    baseball, platoon splits typically mean right-handed hitters struggle more against right-handed pitchers and vice
+    versa for left-handed hitters. For switch-hitters, they will choose their batting side based on the pitcher's
+    handedness, standing on the opposite side of the plate from the pitcher's throwing arm.
+  </p>
+  <p>
+    Our first visualization focuses on pitch distribution and expected results for batters. This interactive tool allows
+    you to explore how various factors, such as year, month, zone, pitch type, and pitcher's throwing arm can affect a
+    batter's performance. This visualization can help us gain a deeper understanding of the strengths and weaknesses of
+    individual batters and how they perform against specific pitch types and pitchers.
+  </p>
+
+  <p>
+    In this visual, the strike zone is colored to be darker green in zones where the hitter is having greater success,
+    and redder in zones where the hitter is having difficulty producing quality contact. The regions outside of the
+    strike zone are colored darker blue in zones where a higher proportion of pitches were thrown. This gives us an
+    idea of where a pitcher is targeting his attacks, as professional pitchers typicallly aim their pitches near the
+    edge
+    of the strike zone.
+  </p>
+  <p>
+    Please be paitent as the first and
+    second visuals can take a while to load.
+  </p>
+
+  <div class="container">
+    <h2>Pitch Distribution and Expected Results - Batter</h2>
+    <div id="viz1-inputs">
+      <label for="vis1-year-dropdown">Year:</label>
+      <select id="vis1-year-dropdown">
+        <option value="2017">2017</option>
+        <option value="2018">2018</option>
+        <option value="2019">2019</option>
+        <option value="2021">2021</option>
+      </select>
+      <label for="vis1-player-input">Batter:</label>
+      <select id="vis1-player-input"></select>
+      <label for="vis1-month-dropdown">Month:</label>
+      <select id="vis1-month-dropdown">
+        <option value="All">All</option>
+        <option value="4">April</option>
+        <option value="5">May</option>
+        <option value="6">June</option>
+        <option value="7">July</option>
+        <option value="8">August</option>
+        <option value="9">September</option>
+      </select>
+      <label for="vis1-pitch-type-dropdown">Pitch Type:</label>
+      <select id="vis1-pitch-type-dropdown">
+        <option value="All">All pitches</option>
+        <option value="FF">Four Seam Fastball</option>
+        <option value="FT">Two Seam Fastball</option>
+        <option value="SL">Slider</option>
+        <option value="CH">Changeup</option>
+        <option value="CU">Curveball</option>
+        <option value="FC">Cutter</option>
+        <option value="FF_FT_FC">All Fastballs</option>
+        <option value="SL_CH_CU">All Offspeed</option>
+      </select>
+      <label for="vis1-throws-dropdown">Pitcher Throws:</label>
+      <select id="vis1-throws-dropdown">
+        <option value="All">All</option>
+        <option value="L">L</option>
+        <option value="R">R</option>
+      </select>
+      <input type="checkbox" id="toggle-click1" checked> Keep player list
+    </div>
+    <div id="vis1-container"></div>
+  </div>
+  <div class="container">
+    <p>
+      Our second visualization focuses on pitch distribution and expected results for pitchers. This interactive tool
+      allows you to explore how various factors, such as year, month, zone, pitch type, and batter's hitting stance can
+      affect a pitcher's performance. This visualization can help us gain a deeper understanding of the tendencies of
+      pitchers
+      in certain scenarios, potentially allowing batters to identify a general zone and pitch where the pitcher is
+      vulnerable.
+    </p>
+    <p>
+      In this visual, the strike zone is colored to be darker green in zones where the pitcher is having greater success
+      and redder in zones where the pitcher is having difficulty preventing quality contact. The regions outside of the
+      strike zone (balls) are colored darker red in zones where a higher proportion of pitches were thrown. This gives
+      us an
+      idea of where a pitcher is targeting their attacks.
+    </p>
+    <h2>Pitch Distribution and Expected Results - Pitcher</h2>
+    <div id="viz2-inputs">
+      <label for="vis2-year-dropdown">Year:</label>
+      <select id="vis2-year-dropdown">
+        <option value="2017">2017</option>
+        <option value="2018">2018</option>
+        <option value="2019">2019</option>
+        <option value="2021">2021</option>
+      </select>
+      <label for="vis2-player-input">Pitcher:</label>
+      <select id="vis2-player-input"></select>
+      <label for="vis2-month-dropdown">Month:</label>
+      <select id="vis2-month-dropdown">
+        <option value="All">All</option>
+        <option value="4">April</option>
+        <option value="5">May</option>
+        <option value="6">June</option>
+        <option value="7">July</option>
+        <option value="8">August</option>
+        <option value="9">September</option>
+      </select>
+      <label for="vis2-pitch-type-dropdown">Pitch Type:</label>
+      <select id="vis2-pitch-type-dropdown">
+        <option value="All">All pitches</option>
+        <option value="FF">Four Seam Fastball</option>
+        <option value="FT">Two Seam Fastball</option>
+        <option value="SL">Slider</option>
+        <option value="CH">Changeup</option>
+        <option value="CU">Curveball</option>
+        <option value="FC">Cutter</option>
+        <option value="FF_FT_FC">All Fastballs</option>
+        <option value="SL_CH_CU">All Offspeed</option>
+      </select>
+      <label for="vis2-stand-dropdown">Batter Stance:</label>
+      <select id="vis2-stand-dropdown">
+        <option value="All">All</option>
+        <option value="L">L</option>
+        <option value="R">R</option>
+      </select>
+      <input type="checkbox" id="toggle-click2" checked> Keep player list
+    </div>
+    <div id="vis2-container"></div>
+  </div>
+  <div class="container">
+    <p>
+      Our third visualization focuses on pitch distribution and expected results for specific pitcher-batter matchups.
+      This interactive tool allows you to explore some interesting matchups between the pitchers and hitters who saw
+      one another the most in each given season. This visualization can help us see in season adptations by pitchers 
+      and hitters against one another during the course of the season.
+    </p>
+    <p>
+      In this visual, the strike zone is colored to be darker red in zones where the pitcher is having greater success
+      and darker blue in zones where the batter is producing quality contact against the pitcher. The regions outside of the
+      strike zone are not dynamically colored in any way.
+    </p>
+    <h2>Pitcher vs. Batter Matchups</h2>
+    <div id="viz3-inputs">
+      <label for="vis3-year-dropdown">Year:</label>
+      <select id="vis3-year-dropdown">
+        <option value="2017">2017</option>
+        <option value="2018">2018</option>
+        <option value="2019">2019</option>
+        <option value="2021">2021</option>
+      </select>
+      <label for="vis3-player-input">Pitcher:</label>
+      <select id="vis3-player-input"></select>
+      <label for="vis3-month-dropdown">Season Segment:</label>
+      <select id="vis3-month-dropdown">
+        <option value="All">All</option>
+        <option value="First Half">First Half</option>
+        <option value="Second Half">Second Half</option>
+      </select>
+      <label for="vis3-pitch-type-dropdown">Pitch Type:</label>
+      <select id="vis3-pitch-type-dropdown">
+        <option value="All">All pitches</option>
+        <option value="FF">Four Seam Fastball</option>
+        <option value="FT">Two Seam Fastball</option>
+        <option value="SL">Slider</option>
+        <option value="CH">Changeup</option>
+        <option value="CU">Curveball</option>
+        <option value="FC">Cutter</option>
+        <option value="FF_FT_FC">All Fastballs</option>
+        <option value="SL_CH_CU">All Offspeed</option>
+      </select>
+    </div>
+    <div id="vis3-container"></div>
+    <p>
+      This project provides a tool to support the analysis of numerous aspects of baseball pitcher vs hitter dynamics.
+      For some examples of the applications of this visualization that might benefit a hitter or pitcher, see my
+      submission video.
+    </p>
+  </div>
+  <script src="vis1.js"></script>
+  <script src="vis2.js"></script>
+  <script src="vis3.js"></script>
+</body>
+
+</html>
