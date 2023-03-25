@@ -86,7 +86,7 @@ function initializePlayerDropdown(data) {
 }
 
 function updateData() {
-    var filename = "http://localhost:8080/" + "Statcast" + selectedYear.slice(-2) + "-Bat.csv";
+    var filename = "/Statcast" + selectedYear.slice(-2) + "-Bat.zip";
 
     // Load the zip file using the fetch API
     fetch(filename)
