@@ -50,7 +50,7 @@ function initializePlayerDropdown3(data) {
 }
 
 function updateData3() {
-    var filename3 = "/Statcast" + selectedYear3.slice(-2) + "-matchups.zip";
+    var filename3 = "Statcast" + selectedYear3.slice(-2) + "-matchups.zip";
 
     // Load the zip file using the fetch API
     fetch(filename3)
