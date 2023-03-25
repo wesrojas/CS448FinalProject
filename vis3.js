@@ -74,6 +74,8 @@ function updateData3() {
         .then((csvText) => {
             // Parse the CSV text using D3.js
             const data3 = d3.csvParse(csvText);
+            var selectedPitcher = player3.split(" vs ")[0];
+            var selectedBatter = player3.split(" vs ")[1];
             // Filter the data based on user selections
             filteredData2 = data3.filter(function (d) {
                 if (selectedMonth3 === "All") {
