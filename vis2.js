@@ -81,7 +81,7 @@ function initializePlayerDropdown2(data) {
 }
 
 function updateData2() {
-    var filename2 = "/Statcast" + selectedYear2.slice(-2) + "-Pit.zip";
+    var filename2 = "Statcast" + selectedYear2.slice(-2) + "-Pit.zip";
 
     // Load the zip file using the fetch API
     fetch(filename2)
