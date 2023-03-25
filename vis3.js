@@ -329,7 +329,7 @@ function updateVisualization3(zonePercentages3) {
 
 
     svg3.append("svg3:image")
-        .attr("xlink:href", "http://localhost:8080/homeplate.png")
+        .attr("xlink:href", "homeplate.png")
         .attr("width", "80%")
         .attr("height", "15%")
         .attr("preserveAspectRatio", "none")
